@@ -44,30 +44,31 @@ public class HPFilter {
 
 
         //var interpolated = Operation.Interpolate(signal, 3);
-        var decimated = Operation.Decimate(signal, 2);
+        //var decimated = Operation.Decimate(signal, 2);
         //var updown = Operation.ResampleUpDown(signal, 3, 2);
 
+        
         // time scale modification
+        //var stretched = Operation.TimeStretch(signal, 2.0, algorithm: TsmAlgorithm.PhaseVocoderPhaseLocking); // silence?
 
         var stretch = Operation.TimeStretch(signal, 1.1, TsmAlgorithm.Wsola);
         //var cool = Operation.TimeStretch(signal, 16, TsmAlgorithm.PaulStretch);
 
         //bandpass (todo)
-        
+        /*
         var tf = new NWaves.Filters.Butterworth.BandPassFilter(0.1, 0.16, 7).Tf;
         // get array of SOS from TF:
-        
         TransferFunction[] sos = DesignFilter.TfToSos(tf);
         var sosFilter = new FilterChain(sos);
+        var y = sosFilter.ApplyTo(stretch);
+        */
 
-        ////System.NotImplementedException: The method or operation is not implemented.
-        //var pitch = new NWaves.Effects.PitchShiftEffect(2.0); // or pitch shift when time stretching or resampling?
-        //sosFilter.Add(pitch);
+        //https://github.com/ar1st0crat/NWaves/blob/41e9fef88fa58171eeed1e3464832271e7b76ddb/NWaves/Effects/PitchShiftEffect.cs
+        //var pitch = new NWaves.Effects.PitchShiftEffect(1.5, 1024, 128, TsmAlgorithm.Wsola);
+        //var z = pitch.ApplyTo(y);
 
-        var y = sosFilter.ApplyTo(signal);
-
-        // resample now or earlier?
-        var resampled = Operation.Resample(signal, 8000);
+        var speedy = new DiscreteSignal(stretch.SamplingRate * 2, stretch.Samples);
+        var resampled = Operation.Resample(speedy, 8000);
 
         var waveFileOut = new WaveFile(resampled);
 
