@@ -12,25 +12,14 @@ namespace HParrotFilterLib;
 
 public class HPFilter {
 
+    //+ NAudio.Wave;
     //https://github.com/ar1st0crat/NWaves
     //https://github.com/xenolightning/AudioSwitcher/tree/master/AudioSwitcher.AudioApi.CoreAudio
 
     string inputFile = @"c:\samples\sample.wav";
     string outputFile = @"c:\samples\output_mono.wav";
 
-    public void Test() {
-
-        // loads a sample, processes it, and saves it again
-
-        // docs: https://github.com/ar1st0crat/NWaves
-
-        WaveFile waveContainer;
-
-        // load
-
-        using (var stream = new FileStream(inputFile, FileMode.Open)) {
-            waveContainer = new WaveFile(stream);
-        }
+    public DiscreteSignal ParrotFilter(WaveFile waveContainer) {
 
         DiscreteSignal left = waveContainer[Channels.Left];
         //DiscreteSignal right = waveContainer[Channels.Right];
@@ -40,14 +29,14 @@ public class HPFilter {
         var signal = left;
 
         var normalize = Operation.NormalizePeak(signal, -3.0); // or is normalization is automatic?
-        //var normalizeRms = Operation.NormalizeRms(signal, -3.0);
+                                                               //var normalizeRms = Operation.NormalizeRms(signal, -3.0);
 
 
         //var interpolated = Operation.Interpolate(signal, 3);
         //var decimated = Operation.Decimate(signal, 2);
         //var updown = Operation.ResampleUpDown(signal, 3, 2);
 
-        
+
         // time scale modification
         //var stretched = Operation.TimeStretch(signal, 2.0, algorithm: TsmAlgorithm.PhaseVocoderPhaseLocking); // silence?
 
@@ -70,6 +59,27 @@ public class HPFilter {
         var speedy = new DiscreteSignal(stretch.SamplingRate * 2, stretch.Samples);
         var resampled = Operation.Resample(speedy, 8000);
 
+        return resampled;
+    }
+
+    public void Test() {
+
+        // loads a sample, processes it, and saves it again
+
+        // docs: https://github.com/ar1st0crat/NWaves
+
+        WaveFile waveContainer;
+
+        // load
+
+        using (var stream = new FileStream(inputFile, FileMode.Open)) {
+            waveContainer = new WaveFile(stream);
+
+
+        }
+
+        var resampled = ParrotFilter(waveContainer);
+
         var waveFileOut = new WaveFile(resampled);
 
         using (var stream = new FileStream(outputFile, FileMode.Create)) {
@@ -77,4 +87,6 @@ public class HPFilter {
         }
 
     }
+
+
 }
