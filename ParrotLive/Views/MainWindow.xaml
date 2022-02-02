@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm ="clr-namespace:NWaves.DemoMfccOnline.ViewModels"
         mc:Ignorable="d"
-        Title="MFCC online"
+        Title="ParrotLive for HachuMart"
         Height="500" Width="800">
     
     <Window.DataContext>
