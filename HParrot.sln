@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HParrotFilterLib", "HParrot
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParrotExe", "ParrotExe\ParrotExe.csproj", "{CA69C825-578B-4B9E-83CB-65788848E180}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParrotLive", "ParrotLive\ParrotLive.csproj", "{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CA69C825-578B-4B9E-83CB-65788848E180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA69C825-578B-4B9E-83CB-65788848E180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA69C825-578B-4B9E-83CB-65788848E180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
