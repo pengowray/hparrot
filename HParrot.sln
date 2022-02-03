@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParrotExe", "ParrotExe\ParrotExe.csproj", "{CA69C825-578B-4B9E-83CB-65788848E180}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParrotLive", "ParrotLive\ParrotLive.csproj", "{4CF27904-6D6D-4A52-9BAC-3D488CEE0CF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3376E7A-6043-4140-AFAB-125D06F4E180} = {D3376E7A-6043-4140-AFAB-125D06F4E180}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

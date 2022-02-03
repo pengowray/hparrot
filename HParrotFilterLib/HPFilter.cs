@@ -12,24 +12,27 @@ namespace HParrotFilterLib;
 
 public class HPFilter {
 
-    //+ NAudio.Wave;
-    //https://github.com/ar1st0crat/NWaves
-    //https://github.com/xenolightning/AudioSwitcher/tree/master/AudioSwitcher.AudioApi.CoreAudio
+    // Main libraries etc:
+    // https://github.com/ar1st0crat/NWaves -- filtering
+    // https://github.com/naudio/NAudio -- system audio
+    // https://github.com/xenolightning/AudioSwitcher/tree/master/AudioSwitcher.AudioApi.CoreAudio -- lower level system audio (not used)
+    // https://github.com/ar1st0crat/NWaves.Samples -- example projects (ParrotLive based on DemoMfccOnline)
 
-    string inputFile = @"c:\samples\sample.wav";
-    string outputFile = @"c:\samples\output_mono.wav";
+    public string InputFile = @"c:\samples\sample.wav";
+    public string OutputFile = @"c:\samples\output_mono.wav";
 
     public DiscreteSignal ParrotFilter(WaveFile waveContainer) {
-
         DiscreteSignal left = waveContainer[Channels.Left];
         //DiscreteSignal right = waveContainer[Channels.Right];
+        return ParrotFilter(left);
+    }
+    public DiscreteSignal ParrotFilter(DiscreteSignal signal) {
+
 
         // process
 
-        var signal = left;
-
-        var normalize = Operation.NormalizePeak(signal, -3.0); // or is normalization is automatic?
-                                                               //var normalizeRms = Operation.NormalizeRms(signal, -3.0);
+        var normalize = Operation.NormalizePeak(signal, -3.0); // or is normalization automatic?
+        //var normalizeRms = Operation.NormalizeRms(signal, -3.0);
 
 
         //var interpolated = Operation.Interpolate(signal, 3);
@@ -68,25 +71,36 @@ public class HPFilter {
 
         // docs: https://github.com/ar1st0crat/NWaves
 
-        WaveFile waveContainer;
-
-        // load
-
-        using (var stream = new FileStream(inputFile, FileMode.Open)) {
-            waveContainer = new WaveFile(stream);
-
-
-        }
+        WaveFile waveContainer = Load();
 
         var resampled = ParrotFilter(waveContainer);
 
-        var waveFileOut = new WaveFile(resampled);
+        Save(resampled);
 
-        using (var stream = new FileStream(outputFile, FileMode.Create)) {
-            waveFileOut.SaveTo(stream);
+    }
+    
+    public WaveFile Load(string filename = null) {
+        if (filename == null) {
+            filename = InputFile;
         }
 
+        WaveFile waveContainer;
+        using (var stream = new FileStream(filename, FileMode.Open)) {
+            waveContainer = new WaveFile(stream);
+        }
+        return waveContainer;
     }
 
 
+    public void Save(DiscreteSignal signal, string filename = null) {
+        if (filename == null) {
+            filename = OutputFile;
+        }
+
+        var waveFileOut = new WaveFile(signal);
+
+        using (var stream = new FileStream(OutputFile, FileMode.Create)) {
+            waveFileOut.SaveTo(stream);
+        }
+    }
 }

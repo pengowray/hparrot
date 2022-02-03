@@ -5,6 +5,11 @@ using NWaves.FeatureExtractors.Base;
 using System;
 using System.Collections.Generic;
 
+//added:
+using HParrotFilterLib;
+//using NWaves.Audio;
+using NWaves.Signals;
+
 namespace NWaves.DemoMfccOnline.Services
 {
     class AudioService : IAudioService
@@ -26,6 +31,32 @@ namespace NWaves.DemoMfccOnline.Services
         public WaveFormat? WaveFormat => _waveFormat;
 
         public int Channels { get; protected set; }
+
+        public AudioService() {
+            //VectorsComputed += VectorsComputed_PlayParrot;
+        }
+
+        private void VectorsComputed_PlayParrot(List<float[]> samples) {
+
+            // quick attempt to filter loaded audio, but much too scuffed to work
+
+            //this is much too scuffed to work
+
+            /*
+            int sampleRate = 44000; // ?? get this from somewhere?
+
+            DiscreteSignal wave = new DiscreteSignal(sampleRate, samples[0]);
+            var parrot = new HPFilter();
+            var filtered = parrot.ParrotFilter(wave);
+            parrot.Save(filtered);
+
+            Load(parrot.OutputFile); // no good. will happen at the same time already loading
+            Play();
+
+            //todo: save and loading file is scuffed. do better later.
+
+            */
+        }
 
         public void Load(string filename)
         {
