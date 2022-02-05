@@ -21,13 +21,16 @@ public class HPFilter {
     public string InputFile = @"c:\samples\sample.wav";
     public string OutputFile = @"c:\samples\output_mono.wav";
 
-    public DiscreteSignal ParrotFilter(WaveFile waveContainer) {
-        DiscreteSignal left = waveContainer[Channels.Left];
+    public DiscreteSignal ParrotFilter(string inputFilename) {
+        var file = Load(inputFilename);
+        return ParrotFilter(file, false);
+    }
+    public DiscreteSignal ParrotFilter(WaveFile waveContainer, bool clone) {
+        DiscreteSignal left = waveContainer[Channels.Left].Copy();
         //DiscreteSignal right = waveContainer[Channels.Right];
         return ParrotFilter(left);
     }
     public DiscreteSignal ParrotFilter(DiscreteSignal signal) {
-
 
         // process
 
@@ -73,7 +76,7 @@ public class HPFilter {
 
         WaveFile waveContainer = Load();
 
-        var resampled = ParrotFilter(waveContainer);
+        var resampled = ParrotFilter(waveContainer, clone:false);
 
         Save(resampled);
 

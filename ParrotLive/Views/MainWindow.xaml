@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="ParrotLive for HachuMart"
         Height="500" Width="800">
-    
+
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -18,7 +18,7 @@
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
@@ -30,13 +30,21 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
             <Button Style="{StaticResource AppButton}"
-                    Content="Play"
-                    Command="{Binding PlayCommand}"
-                    Margin="10" Width="80" />
+                Content="Load"
+                Command="{Binding LoadCommand}"
+                Width="80" Height="42" />
+            <Button Style="{StaticResource AppButton}"
+                    Content="Play&#xD;&#xA;Original"
+                    Command="{Binding PreviewCommand}"
+                    Height="42" Width="68" />
+            <Button Style="{StaticResource AppButton}"
+                Content="Play&#xD;&#xA;Filtered"
+                Command="{Binding PlayCommand}"
+                Width="63" Height="42" />
             <Button Style="{StaticResource AppButton}"
                     Content="Stop"
                     Command="{Binding StopCommand}"
-                    Margin="10,10,30,10" Width="80" />
+                    Margin="10,10,30,10" Width="80" Height="39" />
             <Button Style="{StaticResource AppButton}"
                     Content="Record"
                     Command="{Binding StartRecordingCommand}" 

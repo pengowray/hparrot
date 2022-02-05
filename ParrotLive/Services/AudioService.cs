@@ -16,7 +16,7 @@ namespace NWaves.DemoMfccOnline.Services
     {
         private AudioFileReader? _reader;
         private WaveOut? _player;
-        private WaveIn? _recorder;
+        private WaveIn? _micIn; // (was called _recorder but confusingly it doesn't record)
 
         private OnlineFeatureExtractor? _extractor;
 
@@ -27,16 +27,22 @@ namespace NWaves.DemoMfccOnline.Services
 
         public event Action<float[]>? WaveformUpdated;
         public event Action<List<float[]>>? VectorsComputed;
+        public event Action? Complete;
+
+        private List<float> RecordBuffer;
+        private List<float> FileBuffer;
 
         public WaveFormat? WaveFormat => _waveFormat;
+
+        public ParrotFileSource ParrotFile;
 
         public int Channels { get; protected set; }
 
         public AudioService() {
-            //VectorsComputed += VectorsComputed_PlayParrot;
+            WaveformUpdated += UpdatePlayParrot;
         }
 
-        private void VectorsComputed_PlayParrot(List<float[]> samples) {
+        private void UpdatePlayParrot(float[] samples) {
 
             // quick attempt to filter loaded audio, but much too scuffed to work
 
@@ -60,19 +66,44 @@ namespace NWaves.DemoMfccOnline.Services
 
         public void Load(string filename)
         {
-            _player?.Stop();
-            _player?.Dispose();
-            _reader?.Dispose();
+            //ParrotFile?.Stop(); // TODO stop old or have it listen to stop events
 
-            _reader = new AudioFileReader(filename);
+            ParrotFile = new ParrotFileSource(filename);
 
-            Channels = _reader.WaveFormat.Channels;
-            _waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(_reader.WaveFormat.SampleRate, Channels);
+            //_player?.Stop();
+            //_player?.Dispose();
+            //_reader?.Dispose();
 
-            _player = new WaveOut();
-            _player.Init(this);
+            //_reader = new AudioFileReader(filename);
+            //Channels = _reader.WaveFormat.Channels;
+            //_waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(_reader.WaveFormat.SampleRate, Channels);
+
+
+            //new ISampleProvider(_reader);
+
+            //_player = new WaveOut();
+            //_player.Init(this);
+            //_player.Init();
         }
+        public void Play() {
+            ParrotFile?.Play(true);
+            /*
+            if (_player is null)
+            {
+                return;
+            }
 
+            if (_player.PlaybackState == PlaybackState.Stopped)
+            {
+                _reader?.Seek(0, System.IO.SeekOrigin.Begin);
+            }
+
+            _player.Play();
+            */
+        }
+        public void Preview() {
+            ParrotFile?.Play(false);
+        }
         public void Update(MfccExtractor extractor)
         {
             _extractor = new OnlineFeatureExtractor(extractor);
@@ -143,24 +174,10 @@ namespace NWaves.DemoMfccOnline.Services
             return samplesRead;
         }
 
-        public void Play()
-        {
-            if (_player is null)
-            {
-                return;
-            }
-
-            if (_player.PlaybackState == PlaybackState.Stopped)
-            {
-                _reader?.Seek(0, System.IO.SeekOrigin.Begin);
-            }
-
-            _player.Play();
-        }
-
         public void Pause()
         {
-            _player?.Pause();
+            ParrotFile?.Play(false);
+            //_player?.Pause();
         }
 
         public void Stop()
@@ -171,22 +188,22 @@ namespace NWaves.DemoMfccOnline.Services
 
         public void StartRecording(int deviceNumber = 0)
         {
-            _recorder = new WaveIn
+            _micIn = new WaveIn
             {
                 WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(16000, 1),
                 DeviceNumber = deviceNumber,
                 BufferMilliseconds = 200
             };
 
-            _recorder.DataAvailable += OnRecordedDataAvailable;
+            _micIn.DataAvailable += OnRecordedDataAvailable;
             
-            _recorder?.StartRecording();
+            _micIn?.StartRecording();
         }
 
         public void StopRecording()
         {
-            _recorder?.StopRecording();
-            _recorder?.Dispose();
+            _micIn?.StopRecording();
+            _micIn?.Dispose();
         }
 
         private void OnRecordedDataAvailable(object? sender, WaveInEventArgs waveInArgs)
@@ -209,7 +226,7 @@ namespace NWaves.DemoMfccOnline.Services
         {
             _player?.Dispose();
             _reader?.Dispose();
-            _recorder?.Dispose();
+            _micIn?.Dispose();
         }
     }
 }

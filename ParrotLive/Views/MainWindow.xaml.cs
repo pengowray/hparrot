@@ -11,5 +11,6 @@ namespace NWaves.DemoMfccOnline.Views
         {
             InitializeComponent();
         }
+
     }
 }

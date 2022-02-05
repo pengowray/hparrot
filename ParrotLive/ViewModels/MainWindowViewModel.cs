@@ -53,7 +53,10 @@ namespace NWaves.DemoMfccOnline.ViewModels
         public List<string> Devices { get; set; }
         public int DeviceNumber { get; set; }
 
-        
+
+        public DelegateCommand LoadCommand { get; }
+        public DelegateCommand PreviewCommand { get; }
+
         public DelegateCommand PlayCommand { get; }
         public DelegateCommand PauseCommand { get; }
         public DelegateCommand StopCommand { get; }
@@ -68,6 +71,9 @@ namespace NWaves.DemoMfccOnline.ViewModels
             _audioService.VectorsComputed += UpdateMfcc;
             _audioService.WaveformUpdated += UpdateWaveform;
 
+            LoadCommand = new DelegateCommand(Load, () => true);
+            PlayCommand = new DelegateCommand(Play, () => true);
+            PreviewCommand = new DelegateCommand(Preview, () => true);
             PlayCommand = new DelegateCommand(Play, () => true);
             PauseCommand = new DelegateCommand(Pause, () => true);
             StopCommand = new DelegateCommand(Stop, () => true);
@@ -94,21 +100,20 @@ namespace NWaves.DemoMfccOnline.ViewModels
             _waveformBitmapClearPixels = new byte[WaveformBitmap.PixelHeight * WaveformBitmap.PixelWidth * 4];
         }
 
-        
+
         #region playback and recording
 
-        void Play()
-        {
+        void Load() {
             var openFileDialog = new OpenFileDialog();
             var dialogResult = openFileDialog.ShowDialog();
 
-            if (dialogResult == false)
-            {
+            if (dialogResult == false) {
                 return;
             }
 
             _audioService.Load(openFileDialog.FileName);
-            
+
+            /*
             var mfccOptions = new MfccOptions
             {
                 SamplingRate = _audioService.WaveFormat.SampleRate,
@@ -118,7 +123,13 @@ namespace NWaves.DemoMfccOnline.ViewModels
             _audioService.Update(extractor);
 
             ClearPlots();
-            
+            */
+        }
+        void Preview() {
+            _audioService.Preview();
+        }
+        void Play()
+        {
             _audioService.Play();
         }
 

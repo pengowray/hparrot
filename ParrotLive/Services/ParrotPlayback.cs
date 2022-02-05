@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParrotLive.Services {
+namespace NWaves.DemoMfccOnline.Services {
     internal class ParrotPlayback {
     }
 }

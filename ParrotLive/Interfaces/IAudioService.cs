@@ -10,6 +10,7 @@ namespace NWaves.DemoMfccOnline.Interfaces
         int Channels { get; }
 
         void Play();
+        void Preview();
         void Pause();
         void Stop();
         void StartRecording(int deviceNumber);
